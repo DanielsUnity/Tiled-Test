@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class PlayerModel : MonoBehaviour {
+public class CharacterBehaviorModel : MonoBehaviour {
 
     public float speed = 5f;
 
@@ -58,7 +58,7 @@ public class PlayerModel : MonoBehaviour {
 
     public Vector3 GetDirection()
     {
-        return movementVector;//TODO Flesh out GetDirection (Diagonals should keep last direction facing). Apply also to SetDirection
+        return movementVector;
     }
 
     public bool IsMoving()

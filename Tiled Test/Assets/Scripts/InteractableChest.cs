@@ -3,24 +3,21 @@ using System.Collections;
 
 public class InteractableChest : InteractableBase {
 
-    public override void OnInteractFromLeftSide()
-    {
-        Debug.Log("Interacting with chest from the left side");
-    }
+    public Sprite openedChestSprite;
+    public ItemType itemInChest;
+    public int amountInChest;
 
-    public override void OnInteractFromRightSide()
-    {
-        Debug.Log("Interacting with chest from the right side");
-    }
+    private bool isOpened = false;
 
-    public override void OnInteractFromAbove()
-    {
-        Debug.Log("Interacting with chest from above");
-    }
 
-    public override void OnInteractFromBelow()
+    public override void OnInteractFromBelow(Character character)
     {
-        Debug.Log("Interacting with chest from below");
+        if (!isOpened)
+        { 
+            GetComponentInChildren<SpriteRenderer>().sprite = openedChestSprite;
+            isOpened = true;
+            character.inventory.AddItem(itemInChest, amountInChest);
+        }
     }
 
 }

@@ -3,9 +3,9 @@ using System.Collections;
 
 public class InteractableBase : MonoBehaviour {
 
-    public virtual void OnInteractFromLeftSide(){}
-    public virtual void OnInteractFromRightSide(){}
-    public virtual void OnInteractFromAbove(){}
-    public virtual void OnInteractFromBelow(){}
+    public virtual void OnInteractFromLeftSide(Character character){ }
+    public virtual void OnInteractFromRightSide(Character character) { }
+    public virtual void OnInteractFromAbove(Character character) { }
+    public virtual void OnInteractFromBelow(Character character) { }
 
 }

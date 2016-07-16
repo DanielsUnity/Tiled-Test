@@ -1,27 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerBaseController : MonoBehaviour {
+public class CharacterBaseController : MonoBehaviour {
 
-	protected PlayerModel playerModel;
+	protected CharacterBehaviorModel characterModel;
     protected CharacterInteractionModel interactionModel;
 
 	void Start () {
-        playerModel = GetComponent<PlayerModel>();
+        characterModel = GetComponent<CharacterBehaviorModel>();
         interactionModel = GetComponent<CharacterInteractionModel>();
 	}
 
 
     protected void SetDirection(Vector3 direction)
     {
-        if (playerModel == null) { return; }
-        playerModel.SetDirection(direction);
+        if (characterModel == null) { return; }
+        characterModel.SetDirection(direction);
     }
 
     protected void OnActionPressed()
     {
         if (interactionModel == null) { return; }
-        //TODO Finish OnActionPressed
         interactionModel.OnInteract();
     }
 }

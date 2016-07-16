@@ -2,18 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(PlayerModel))]
+[RequireComponent(typeof(CharacterBehaviorModel))]
 [RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Character))]
 public class CharacterInteractionModel : MonoBehaviour {
 
     public float maxAngleAbleToInteract = 30f;
 
-    private PlayerModel playerModel;
+    private CharacterBehaviorModel playerModel;
     private Collider2D characterCollider;
+    private Character character;
 
 
 	void Start () {
-        playerModel = GetComponent<PlayerModel>();
+        character = GetComponent<Character>();
+        playerModel = GetComponent<CharacterBehaviorModel>();
         characterCollider = GetComponent<Collider2D>();
 	}
 	
@@ -30,22 +33,22 @@ public class CharacterInteractionModel : MonoBehaviour {
 
         if(playerModel.GetFacingDirection() == Vector3.right)
         {
-            usableInteractable.OnInteractFromLeftSide();
+            usableInteractable.OnInteractFromLeftSide(character);
         }
 
         if (playerModel.GetFacingDirection() == Vector3.left)
         {
-            usableInteractable.OnInteractFromRightSide();
+            usableInteractable.OnInteractFromRightSide(character);
         }
 
         if (playerModel.GetFacingDirection() == Vector3.up)
         {
-            usableInteractable.OnInteractFromBelow();
+            usableInteractable.OnInteractFromBelow(character);
         }
 
         if (playerModel.GetFacingDirection() == Vector3.down)
         {
-            usableInteractable.OnInteractFromAbove();
+            usableInteractable.OnInteractFromAbove(character);
         }
 
     }

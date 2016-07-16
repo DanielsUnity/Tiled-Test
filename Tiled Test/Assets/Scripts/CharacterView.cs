@@ -2,15 +2,15 @@
 using System.Collections;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(PlayerModel))]
-public class PlayerView : MonoBehaviour {
+[RequireComponent(typeof(CharacterBehaviorModel))]
+public class CharacterView : MonoBehaviour {
 
     private Animator animator;
-    private PlayerModel playerModel; 
+    private CharacterBehaviorModel playerModel; 
 	
 	void Start () {
         animator = GetComponent<Animator>();
-        playerModel = GetComponent<PlayerModel>();
+        playerModel = GetComponent<CharacterBehaviorModel>();
 	}
 	
     
