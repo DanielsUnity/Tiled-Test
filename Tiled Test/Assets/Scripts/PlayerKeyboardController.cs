@@ -6,13 +6,21 @@ public class PlayerKeyboardController : PlayerBaseController
 {
 
 	
-	void FixedUpdate ()
+	void Update ()
     {
-        ManageInputs();
+        UpdateDirection();
+        UpdateAction();
     }
 
+    void UpdateAction()
+    {
+        if (Input.GetButtonDown("Keyboard Action"))
+        {
+            OnActionPressed();
+        }
+    }
 
-    void ManageInputs()
+    void UpdateDirection()
     {
         float horizontal = Input.GetAxis("Keyboard Horizontal");//we could cast this to an int to get only -1, 0 and 1
         float vertical = Input.GetAxis("Keyboard Vertical");

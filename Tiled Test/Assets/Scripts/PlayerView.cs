@@ -15,12 +15,12 @@ public class PlayerView : MonoBehaviour {
 	
     
 	void Update () {
-        UpdateDirection();
+        UpdateFacingDirection();
 	}
 
-    void UpdateDirection()
+    void UpdateFacingDirection()
     {
-        Vector3 direction = playerModel.GetDirection();
+        Vector3 direction = playerModel.GetFacingDirection();
 
         if (direction != Vector3.zero)
         {
