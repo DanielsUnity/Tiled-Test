@@ -1,39 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(DialogManager))]
 public class InteractableSign : InteractableBase {
 
-    public string text;
+    public string alternateMessage = "You cannot read anything from here";
 
-    private bool hasBeenInterctedWith = false;
-    private Camera gameCamera;
+    private DialogManager dialogManager;
 
     void Awake()
     {
-        gameCamera = FindObjectOfType<Camera>();
-    } 
+        dialogManager = GetComponent<DialogManager>();
+    }
 
     public override void OnInteractFromBelow(Character character)
     {
-        if (!hasBeenInterctedWith)
-        {
-            hasBeenInterctedWith = true;
-            if (transform.position.y < gameCamera.transform.position.y)
-            {
-                UpperDialogBox.instance.Show(text);
-            }
-            else
-            {
-                LowerDialogBox.instance.Show(text);
-            }
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            hasBeenInterctedWith = false;
-            LowerDialogBox.instance.Hide();
-            UpperDialogBox.instance.Hide();
-            Time.timeScale = 1f;
-        }
+        //Aside from the dialog box we could trigger some event, at most, otherwise this line should always go alone
+        dialogManager.Manage();
+    }
+
+    public override void OnInteractFromAbove(Character character)
+    {
+        dialogManager.WriteAlternateMessage(alternateMessage);
     }
 }
