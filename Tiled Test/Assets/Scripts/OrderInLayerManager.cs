@@ -15,6 +15,10 @@ public class OrderInLayerManager : MonoBehaviour {
 	}
 	
 	void Update () {
+        if (!mainCamera)
+        {
+            mainCamera = FindObjectOfType<Camera>();
+        }
         float relativeHeight = GetComponentInParent<Transform>().position.y - mainCamera.transform.position.y;
 
         if (Mathf.Abs(relativeHeight) > 2*mainCamera.orthographicSize) //If the object is outside the camera range we set the order to 0 (given a margin of twice the camera size)

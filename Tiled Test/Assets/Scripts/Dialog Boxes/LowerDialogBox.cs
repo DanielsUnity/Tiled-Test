@@ -12,14 +12,4 @@ public class LowerDialogBox : DialogBox {
             instance = this;
         }
     }
-
-    public override void Show(string displayText)
-    {
-        base.Show(displayText);
-    }
-
-    public override void Hide()
-    {
-        base.Hide();
-    }
 }

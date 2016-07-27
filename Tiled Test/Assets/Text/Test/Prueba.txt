@@ -1,3 +1,1 @@
-This is the test text file, be sure to set the real one for this sign
-Line 2
-Last line
+This is the test text file, be sure to set the real one for this sign.;Line 2;Last line
