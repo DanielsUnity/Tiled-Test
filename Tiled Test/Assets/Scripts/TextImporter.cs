@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(DialogManager))]
 public class TextImporter : MonoBehaviour {
 
     public TextAsset rawTextFile;
@@ -15,11 +16,14 @@ public class TextImporter : MonoBehaviour {
     private int currentStartLine = 0;//TODO Figure out how to write different messages in different sections of the game (Maybe writing the files with [Chapter X] and [State X])
     private int currentEndLine;
     private int endLine;
+
+    private DialogManager dialogManager;
     
     public enum TextType
     {
         Regular,
-        Answer
+        Answer,
+        Reaction
     }
 
     private struct SentenceStruct
@@ -48,6 +52,11 @@ public class TextImporter : MonoBehaviour {
             set { type = value; }
 
         }
+    }
+
+    void Awake()
+    {
+        dialogManager = GetComponent<DialogManager>();
     }
 
 	void Start () {
@@ -84,6 +93,12 @@ public class TextImporter : MonoBehaviour {
                     string formattedSentence = sentence.Substring(index + 2);
                     currentLineSentences.Add(new SentenceStruct(formattedSentence, TextType.Answer));
                 }
+                if (sentence.StartsWith(">Reaction"))
+                {
+                    int index = sentence.IndexOf(":");
+                    string formattedSentence = sentence.Substring(index + 2);
+                    currentLineSentences.Add(new SentenceStruct(formattedSentence, TextType.Reaction));
+                }
             }
         }
     }
@@ -113,8 +128,9 @@ public class TextImporter : MonoBehaviour {
         }
     }
 
-    public string GetNextAnswer()
+    public string GetNextAnswer(out bool isLastInteraction)
     {
+        isLastInteraction = false;
         if (currentLineSentences.Count > sentenceIndex + 1)//If there's at least another sentence
         {
             if (currentLineSentences[sentenceIndex + 1].Type == TextType.Answer)//if it is an answer
@@ -123,7 +139,28 @@ public class TextImporter : MonoBehaviour {
                 return currentLineSentences[sentenceIndex].Sentence;
             }
         }
+        else
+        {
+            sentenceIndex = 0;
+            isLastInteraction = true;
+        }
         return null;//If there aren't more sentences or the next one is not an answer
+    }
+
+    public string GetCorrectReaction(int answerSelected)
+    {
+        //We assume all remaining sentences are reactions
+        for (int i = 0; i < 4; i++)
+        {
+            if (i == answerSelected)
+            {
+                int aux = sentenceIndex;
+                sentenceIndex = 0;
+                return currentLineSentences[aux + i].Sentence;
+            }
+        }
+        Debug.LogWarning("There's no matching reaction to selected answer");
+        return null;
     }
 
     public string GetCurrentLine()

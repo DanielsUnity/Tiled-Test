@@ -13,9 +13,4 @@ public class AnswerBoxBase : DialogBox {
     {
         GetComponent<Image>().color = Color.white;
     }
-
-    public virtual void Submit()
-    {
-        //could return its panel number in the actual instance
-    }
 }
