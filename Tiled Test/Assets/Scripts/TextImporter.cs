@@ -17,7 +17,6 @@ public class TextImporter : MonoBehaviour {
     private int currentEndLine;
     private int endLine;
 
-    private DialogManager dialogManager;
     
     public enum TextType
     {
@@ -30,12 +29,20 @@ public class TextImporter : MonoBehaviour {
     {
         string sentence;
         TextType type;
+        string state;
 
         public SentenceStruct(string sentence, TextType type)
         {
             this.sentence = sentence;
             this.type = type;
+            this.state = null;
+        }
 
+        public SentenceStruct(string sentence, TextType type, string state)
+        {
+            this.sentence = sentence;
+            this.type = type;
+            this.state = state;
         }
 
         public string Sentence
@@ -52,11 +59,13 @@ public class TextImporter : MonoBehaviour {
             set { type = value; }
 
         }
-    }
 
-    void Awake()
-    {
-        dialogManager = GetComponent<DialogManager>();
+        public string State
+        {
+            get { return state; }
+            set { state = value; }
+
+        }
     }
 
 	void Start () {
@@ -97,7 +106,9 @@ public class TextImporter : MonoBehaviour {
                 {
                     int index = sentence.IndexOf(":");
                     string formattedSentence = sentence.Substring(index + 2);
-                    currentLineSentences.Add(new SentenceStruct(formattedSentence, TextType.Reaction));
+                    int index2 = sentence.IndexOf("/");//Get the string from "/ " to ":"
+                    string state = sentence.Substring(index2 + 2, index - index2 - 2);
+                    currentLineSentences.Add(new SentenceStruct(formattedSentence, TextType.Reaction, state));
                 }
             }
         }
@@ -147,15 +158,20 @@ public class TextImporter : MonoBehaviour {
         return null;//If there aren't more sentences or the next one is not an answer
     }
 
-    public string GetCorrectReaction(int answerSelected)
+    public string GetCorrectReaction(int answerSelected, out string reactionState)
     {
         //We assume all remaining sentences are reactions
+        reactionState = null;
         for (int i = 0; i < 4; i++)
         {
             if (i == answerSelected)
             {
                 int aux = sentenceIndex;
                 sentenceIndex = 0;
+                if (currentLineSentences[aux + i].State != null)
+                {
+                    reactionState = currentLineSentences[aux + i].State;
+                }
                 return currentLineSentences[aux + i].Sentence;
             }
         }

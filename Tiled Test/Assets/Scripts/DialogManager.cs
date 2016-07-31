@@ -9,16 +9,19 @@ public class DialogManager : MonoBehaviour {
     private bool isLastInteraction = false;
     private Camera gameCamera;
     private TextImporter textImporter;
+    private StateManager stateManager;
     private bool isUsingTextImporter = false;
     private bool isFreshLine = true;
     private bool inAnswerMode = false;
     private int answerSelected = 0;
     private int numberOfAnswers = 4;
+    private string reactionState = null;
 
     void Awake()
     {
         gameCamera = FindObjectOfType<Camera>();
         textImporter = GetComponent<TextImporter>();
+        stateManager = GetComponent<StateManager>();
     }
 
     void Start()
@@ -77,6 +80,12 @@ public class DialogManager : MonoBehaviour {
         answerSelected = 0;
         DisableBoxes();
         Time.timeScale = 1f;
+
+        if (reactionState != null && stateManager)
+        {
+            stateManager.SetCurrentState(reactionState);
+        }
+        reactionState = null;
     }
 
 
@@ -136,9 +145,11 @@ public class DialogManager : MonoBehaviour {
 
     void HandleReactionText()
     {
-        string sentenceToShow = textImporter.GetCorrectReaction(answerSelected);
+        
+        string sentenceToShow = textImporter.GetCorrectReaction(answerSelected, out reactionState);
         WriteInCorrectBox(sentenceToShow);
         isLastInteraction = true;
+
     }
 
     void HandleAnswerText()
@@ -203,9 +214,6 @@ public class DialogManager : MonoBehaviour {
 
     void SubmitAnswer()
     {
-        //Change state or/and select reaction
-        
-        //for now
         inAnswerMode = false;
         Manage();
     }

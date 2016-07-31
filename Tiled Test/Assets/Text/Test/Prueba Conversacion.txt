@@ -1,1 +1,1 @@
-Hello, my name's Rufus, who are you?;Are you friend or foe?;>Answer 1: A friend.;>Answer 2: A foe, prepare to die!;>Reaction 1: Welcome!;>Reaction 2: Heeeelp!
+Hello, my name's Rufus, who are you?;Are you friend or foe?;>Answer 1: A friend.;>Answer 2: A foe, prepare to die!;>Reaction 1/ Welcoming: Welcome!;>Reaction 2/ Panic: Heeeelp!
