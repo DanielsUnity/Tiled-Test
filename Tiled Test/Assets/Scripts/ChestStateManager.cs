@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
-public class NPCStateManager : StateManager
+public class ChestStateManager : StateManager
 {
+
+    public Sprite openedChestSprite;
 
     private State currentState = (State)0;
     private string[] stateNames = System.Enum.GetNames(typeof(State));
@@ -11,16 +12,15 @@ public class NPCStateManager : StateManager
 
     public enum State
     {
-        Neutral,
-        Welcoming,
-        Panic
+        Closed,
+        Opened
     }
 
 
     public override void SetCurrentState(string state)
     {
         //Probably work for a super class
-        foreach (string name in stateNames) 
+        foreach (string name in stateNames)
         {
             if (name == state)
             {
@@ -65,63 +65,16 @@ public class NPCStateManager : StateManager
 
     void OnChangeState()
     {
-        if (currentState == State.Neutral)
+        if (currentState == State.Opened)
         {
-            OnNeutral();
+            OnOpened();
         }
-        if (currentState == State.Panic)
-        {
-            OnPanic();
-        }
-        if (currentState == State.Welcoming)
-        {
-            OnWelcoming();
-        }
+        //Don't need anything on OnClosed
+
     }
 
-    private void OnWelcoming()
+    void OnOpened()
     {
-        Debug.Log("State changed to \"welcoming\"");
-    }
-
-    private void OnPanic()
-    {
-        Debug.Log("State changed to \"panic\"");
-    }
-
-    private void OnNeutral()
-    {
-        Debug.Log("State changed to \"neutral\"");
-    }
-
-    public void ExecuteStateBehavior()
-    {
-        if (currentState == State.Neutral)
-        {
-            NeutralBehavior();
-        }
-        if (currentState == State.Panic)
-        {
-            PanicBehavior();
-        }
-        if (currentState == State.Welcoming)
-        {
-            WelcomingBehavior();
-        }
-    }
-
-    private void WelcomingBehavior()
-    {
-        
-    }
-
-    private void PanicBehavior()
-    {
-        
-    }
-
-    private void NeutralBehavior()
-    {
-        
+        GetComponentInChildren<SpriteRenderer>().sprite = openedChestSprite;
     }
 }

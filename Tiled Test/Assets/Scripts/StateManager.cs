@@ -7,5 +7,5 @@ public abstract class StateManager : MonoBehaviour {
 
     public abstract void SetCurrentState(int state);
 
-    public abstract int GetCurrentStateInteger();//externally used in TrackedBase extensions
+    public abstract int GetCurrentStateInteger();//externally used in TrackedObject
 }

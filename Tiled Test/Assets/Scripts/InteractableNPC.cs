@@ -13,7 +13,7 @@ public class InteractableNPC : InteractableBase
 
     public override void OnInteractFromBelow(Character character)
     {
-        //Face that way
+        //TODO Face that way
         dialogManager.Manage();
     }
 

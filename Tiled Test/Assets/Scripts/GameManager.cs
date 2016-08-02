@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour {
 
     void PopulateDictionary()
     {
-        foreach (TrackedBase sceneObject in FindObjectsOfType<TrackedBase>())
+        foreach (TrackedObject sceneObject in FindObjectsOfType<TrackedObject>())
         {
             if (CheckThereIsUniqueId(sceneObject))
             {
@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour {
 
     void InitializeCurrentScene()
     {
-        foreach (TrackedBase sceneObject in FindObjectsOfType<TrackedBase>())
+        foreach (TrackedObject sceneObject in FindObjectsOfType<TrackedObject>())
         {
             if (CheckThereIsUniqueId(sceneObject))
             {
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    bool CheckThereIsUniqueId(TrackedBase sceneObject)
+    bool CheckThereIsUniqueId(TrackedObject sceneObject)
     {
         if (!sceneObject.GetComponent<UniqueId>())
         {
