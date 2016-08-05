@@ -7,17 +7,12 @@ public class TextImporter : MonoBehaviour {
 
     public TextAsset rawTextFile;
 
-    private string[] rawTextLines;
-    private string[] rawLineSentences;
     private List<SentenceStruct> currentLineSentences = new List<SentenceStruct>();
     private int sentenceIndex = 0;
+    private Dictionary<string, List<SentenceStruct>> stateToSentencesDictionary = new Dictionary<string, List<SentenceStruct>>();
 
-    private int currentLine = 0;
-    private int currentStartLine = 0;//TODO Figure out how to write different messages in different sections of the game (Maybe writing the files with [Chapter X] and [State X])
-    private int currentEndLine;
-    private int endLine;
+    //TODO Figure out how to write different messages in different sections of the game (Maybe writing the files with [Chapter X] and [State X])
 
-    
     public enum TextType
     {
         Regular,
@@ -71,9 +66,13 @@ public class TextImporter : MonoBehaviour {
 	void Start () {
         if (rawTextFile)
         {
-            rawTextLines = rawTextFile.text.Split('\n');
-            endLine = rawTextLines.Length - 1;
-            currentEndLine = endLine;
+            string[] rawTextLines = rawTextFile.text.Split('\n');
+            
+            foreach (string rawTextLine in rawTextLines)
+            {
+                ParseLine(rawTextLine);
+            }
+            
         }
         else
         {
@@ -81,36 +80,63 @@ public class TextImporter : MonoBehaviour {
         }
 	}
 
-    public void ParseLine()
+    private void ParseLine(string rawTextLine)
     {
-        rawLineSentences = rawTextLines[currentLine].Split(';');
-        currentLineSentences.Clear();
+        string[] rawLineSentences = rawTextLine.Split(';');
+        string formattedState = null;
+        if (rawLineSentences[0].StartsWith(">State"))
+        {
+            int index = rawLineSentences[0].IndexOf(":");
+            formattedState = rawLineSentences[0].Substring(index + 2);
+            stateToSentencesDictionary.Add(formattedState, new List<SentenceStruct>());
+        }
+        else
+        {
+            Debug.LogError("All lines in the text file should start with the corresponding state", this);
+        }
+
         foreach (string sentence in rawLineSentences)
         {
             if (!sentence.StartsWith(">"))
             {
                 //Regular sentence
-                currentLineSentences.Add(new SentenceStruct(sentence,TextType.Regular)); 
+                stateToSentencesDictionary[formattedState].Add(new SentenceStruct(sentence,TextType.Regular)); 
             }
             else
             {
                 //Another type of sentence
                 if (sentence.StartsWith(">Answer"))
                 {
-                    //TODO There should be an answer-state matching around here
                     int index = sentence.IndexOf(":");
                     string formattedSentence = sentence.Substring(index + 2);
-                    currentLineSentences.Add(new SentenceStruct(formattedSentence, TextType.Answer));
+                    stateToSentencesDictionary[formattedState].Add(new SentenceStruct(formattedSentence, TextType.Answer));
                 }
+
                 if (sentence.StartsWith(">Reaction"))
                 {
                     int index = sentence.IndexOf(":");
                     string formattedSentence = sentence.Substring(index + 2);
                     int index2 = sentence.IndexOf("/");//Get the string from "/ " to ":"
                     string state = sentence.Substring(index2 + 2, index - index2 - 2);
-                    currentLineSentences.Add(new SentenceStruct(formattedSentence, TextType.Reaction, state));
+                    stateToSentencesDictionary[formattedState].Add(new SentenceStruct(formattedSentence, TextType.Reaction, state));
                 }
             }
+        }
+    }
+
+    public void SetCurrentLine(string state)
+    {
+        if (stateToSentencesDictionary.ContainsKey(state))
+        {
+            Debug.Log("Getting state: " + state);
+            currentLineSentences = stateToSentencesDictionary[state];//currentLineSentences is really a pointer, so if we clear it we are clearing also the dictionary
+            sentenceIndex = 0;
+            Debug.Log(currentLineSentences[0].Sentence);
+        }
+        else
+        {
+            Debug.LogWarning("The current state doesn't have a matching line in the text file (can be intentional). State: " + state, this);
+            //TODO Reset in dialog Manager, so there's no interaction, maybe return something and do that from there
         }
     }
 
@@ -177,29 +203,5 @@ public class TextImporter : MonoBehaviour {
         }
         Debug.LogWarning("There's no matching reaction to selected answer");
         return null;
-    }
-
-    public string GetCurrentLine()
-    {
-        return rawTextLines[currentLine];
-    }
-
-    public bool AdvanceToNextLine()
-    {
-        if (currentLine >= currentEndLine)
-        {
-            ResetToFirstLine();
-            return false;
-        }
-        else
-        {
-            currentLine++;
-            return true;
-        }
-    }
-
-    public void ResetToFirstLine()
-    {
-        currentLine = currentStartLine;
     }
 }

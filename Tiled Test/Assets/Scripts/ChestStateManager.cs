@@ -58,6 +58,11 @@ public class ChestStateManager : StateManager
         return (int)currentState;
     }
 
+    public override string GetCurrentStateString()
+    {
+        return stateNames[(int)currentState];
+    }
+
     public State GetCurrentState()
     {
         return currentState;

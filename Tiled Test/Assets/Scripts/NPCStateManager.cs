@@ -13,7 +13,8 @@ public class NPCStateManager : StateManager
     {
         Neutral,
         Welcoming,
-        Panic
+        Panic,
+        Kidding
     }
 
 
@@ -58,6 +59,11 @@ public class NPCStateManager : StateManager
         return (int)currentState;
     }
 
+    public override string GetCurrentStateString()
+    {
+        return stateNames[(int)currentState];
+    }
+
     public State GetCurrentState()
     {
         return currentState;
@@ -81,18 +87,24 @@ public class NPCStateManager : StateManager
 
     private void OnWelcoming()
     {
-        Debug.Log("State changed to \"welcoming\"");
+        Debug.Log("State changed to \"Welcoming\"");
+        //TODO Change lines of text the guy speaks
     }
 
     private void OnPanic()
     {
-        Debug.Log("State changed to \"panic\"");
+        Debug.Log("State changed to \"Panic\"");
     }
 
     private void OnNeutral()
     {
-        Debug.Log("State changed to \"neutral\"");
+        Debug.Log("State changed to \"Neutral\"");
     }
+
+    void Update()
+    {
+        ExecuteStateBehavior();
+    } 
 
     public void ExecuteStateBehavior()
     {

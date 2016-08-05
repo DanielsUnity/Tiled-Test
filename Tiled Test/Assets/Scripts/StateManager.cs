@@ -8,4 +8,6 @@ public abstract class StateManager : MonoBehaviour {
     public abstract void SetCurrentState(int state);
 
     public abstract int GetCurrentStateInteger();//externally used in TrackedObject
+
+    public abstract string GetCurrentStateString();//externally used in DialogManager
 }

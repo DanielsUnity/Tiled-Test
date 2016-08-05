@@ -31,10 +31,9 @@ public class DialogManager : MonoBehaviour {
 
     void Update()
     {
-        //TODO Hacer todo lo que se ha borrado de DialogManager (ueeeee)
         if (inAnswerMode)
         {
-            if (Input.GetButtonDown("Keyboard Vertical"))
+            if (Input.GetButtonDown("Keyboard Vertical")) //TODO Refer to CharacterBaseController instead
             {
                 float vertical = Input.GetAxisRaw("Keyboard Vertical");
                 if (vertical > 0)
@@ -117,10 +116,18 @@ public class DialogManager : MonoBehaviour {
             DisableAnswerBoxes();
             if (isFreshLine)
             {
-                textImporter.ParseLine();
+                if (stateManager)
+                {
+                    textImporter.SetCurrentLine(stateManager.GetCurrentStateString());
+                }
+                else
+                {
+                    Debug.LogError("No state manager found", this);
+                }
                 isFreshLine = false;
             }
             TextImporter.TextType sentenceType = textImporter.GetSentenceType();
+            
             if (sentenceType == TextImporter.TextType.Regular)
             {
                 HandleRegularText();
@@ -145,7 +152,7 @@ public class DialogManager : MonoBehaviour {
 
     void HandleReactionText()
     {
-        
+        //As we reset to 0 answerSelected in Reset(), there can be a line of text with one reaction and no answers
         string sentenceToShow = textImporter.GetCorrectReaction(answerSelected, out reactionState);
         WriteInCorrectBox(sentenceToShow);
         isLastInteraction = true;
