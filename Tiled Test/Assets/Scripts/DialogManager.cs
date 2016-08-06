@@ -118,7 +118,12 @@ public class DialogManager : MonoBehaviour {
             {
                 if (stateManager)
                 {
-                    textImporter.SetCurrentLine(stateManager.GetCurrentStateString());
+                    bool hasTheStateSomeDialog = textImporter.SetCurrentLine(stateManager.GetCurrentStateString());
+                    if (!hasTheStateSomeDialog)
+                    {
+                        Reset();
+                        return;
+                    }
                 }
                 else
                 {

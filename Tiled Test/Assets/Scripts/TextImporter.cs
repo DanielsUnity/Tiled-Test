@@ -124,7 +124,7 @@ public class TextImporter : MonoBehaviour {
         }
     }
 
-    public void SetCurrentLine(string state)
+    public bool SetCurrentLine(string state)
     {
         if (stateToSentencesDictionary.ContainsKey(state))
         {
@@ -132,11 +132,12 @@ public class TextImporter : MonoBehaviour {
             currentLineSentences = stateToSentencesDictionary[state];//currentLineSentences is really a pointer, so if we clear it we are clearing also the dictionary
             sentenceIndex = 0;
             Debug.Log(currentLineSentences[0].Sentence);
+            return true;
         }
         else
         {
-            Debug.LogWarning("The current state doesn't have a matching line in the text file (can be intentional). State: " + state, this);
-            //TODO Reset in dialog Manager, so there's no interaction, maybe return something and do that from there
+            Debug.Log("The current state doesn't have a matching line in the text file (can be intentional). State: " + state, this);
+            return false;
         }
     }
 

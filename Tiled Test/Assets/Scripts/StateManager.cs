@@ -10,4 +10,6 @@ public abstract class StateManager : MonoBehaviour {
     public abstract int GetCurrentStateInteger();//externally used in TrackedObject
 
     public abstract string GetCurrentStateString();//externally used in DialogManager
+
+    public abstract void DefaultBehavior();//To force implementation, even if blank (maybe not very elegant to have it public)
 }

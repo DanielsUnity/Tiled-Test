@@ -17,6 +17,12 @@ public class ChestStateManager : StateManager
     }
 
 
+    public override void DefaultBehavior()
+    {
+        //Set this to an already defined behavior, useful for different conversation states with the same behavior
+    }
+
+
     public override void SetCurrentState(string state)
     {
         //Probably work for a super class

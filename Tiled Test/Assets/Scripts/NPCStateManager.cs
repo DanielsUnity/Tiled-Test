@@ -17,6 +17,10 @@ public class NPCStateManager : StateManager
         Kidding
     }
 
+    public override void  DefaultBehavior()
+    {
+        //Set this to an already defined behavior, useful for different conversation states with the same behavior
+    }
 
     public override void SetCurrentState(string state)
     {
@@ -119,6 +123,10 @@ public class NPCStateManager : StateManager
         if (currentState == State.Welcoming)
         {
             WelcomingBehavior();
+        }
+        else
+        {
+            DefaultBehavior();
         }
     }
 
