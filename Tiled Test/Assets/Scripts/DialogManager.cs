@@ -88,6 +88,20 @@ public class DialogManager : MonoBehaviour {
     }
 
 
+    public void SpecialReset()
+    {
+        isLastInteraction = false;
+        isFreshLine = true;
+        DeselectAnswer(answerSelected + 1);
+        answerSelected = 0;
+        if (reactionState != null && stateManager)
+        {
+            stateManager.SetCurrentState(reactionState);
+        }
+        reactionState = null;
+    }
+
+
     void DisableBoxes()
     {
         LowerDialogBox.instance.Hide();
@@ -150,6 +164,7 @@ public class DialogManager : MonoBehaviour {
             {
                 isLastInteraction = true;
             }
+
         }
     }
 
@@ -158,10 +173,14 @@ public class DialogManager : MonoBehaviour {
     void HandleReactionText()
     {
         //As we reset to 0 answerSelected in Reset(), there can be a line of text with one reaction and no answers
-        string sentenceToShow = textImporter.GetCorrectReaction(answerSelected, out reactionState);
+        bool continueTalking;
+        string sentenceToShow = textImporter.GetCorrectReaction(answerSelected, out reactionState, out continueTalking);
         WriteInCorrectBox(sentenceToShow);
         isLastInteraction = true;
-
+        if (continueTalking)
+        {
+            SpecialReset();
+        }
     }
 
     void HandleAnswerText()

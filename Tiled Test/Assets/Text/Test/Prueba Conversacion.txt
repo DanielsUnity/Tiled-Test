@@ -1,4 +1,4 @@
 >State: Neutral;Hello, my name's Test, who are you?;Are you friend or foe?;>Answer 1: A friend.;>Answer 2: A foe, prepare to die!;>Reaction 1/ Welcoming: Welcome!;>Reaction 2/ Panic: Heeeelp!
 >State: Welcoming;Do you need some help with the controls?;>Answer 1: Yes;>Answer 2: Nope;>Reaction 1/ Kidding: Press B + A + forward + forward-up + up + X + Y to perform a backflip;>Reaction 2/ Welcoming: You think you're an expert, huh?  
 >State: Panic;Heeeelp!
->State: Kidding;>Reaction/ Welcoming: Just Kidding!
+>State: Kidding;>Reaction (Continue)/ Welcoming: Just Kidding!

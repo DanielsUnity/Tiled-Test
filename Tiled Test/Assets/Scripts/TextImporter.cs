@@ -25,19 +25,22 @@ public class TextImporter : MonoBehaviour {
         string sentence;
         TextType type;
         string state;
+        bool continueTalking;
 
         public SentenceStruct(string sentence, TextType type)
         {
             this.sentence = sentence;
             this.type = type;
             this.state = null;
+            this.continueTalking = false;
         }
 
-        public SentenceStruct(string sentence, TextType type, string state)
+        public SentenceStruct(string sentence, TextType type, string state, bool continueTalking)
         {
             this.sentence = sentence;
             this.type = type;
             this.state = state;
+            this.continueTalking = continueTalking;
         }
 
         public string Sentence
@@ -45,21 +48,24 @@ public class TextImporter : MonoBehaviour {
 
             get { return sentence; }
             set { sentence = value; }
-
         }
 
         public TextType Type
         {
             get { return type; }
             set { type = value; }
-
         }
 
         public string State
         {
             get { return state; }
             set { state = value; }
+        }
 
+        public bool Continue
+        {
+            get { return continueTalking; }
+            set { continueTalking = value; }
         }
     }
 
@@ -114,11 +120,27 @@ public class TextImporter : MonoBehaviour {
 
                 if (sentence.StartsWith(">Reaction"))
                 {
+                    bool continueTalking = false;
+
                     int index = sentence.IndexOf(":");
                     string formattedSentence = sentence.Substring(index + 2);
+
                     int index2 = sentence.IndexOf("/");//Get the string from "/ " to ":"
                     string state = sentence.Substring(index2 + 2, index - index2 - 2);
-                    stateToSentencesDictionary[formattedState].Add(new SentenceStruct(formattedSentence, TextType.Reaction, state));
+
+                    int index3 = sentence.IndexOf("(");
+                    int index4 = sentence.IndexOf(")");
+                    if (index3 > 0 && index4 > 0)
+                    {
+                        string wordInParenthesis = sentence.Substring(index3 + 1, index4 - index3 - 1);
+                        if (wordInParenthesis == "Continue") { continueTalking = true; }
+                        else
+                        {
+                            Debug.LogWarning("Check your spelling of \"Continue\". You wrote \"" + wordInParenthesis + "\".", this);
+                        }
+                    }
+
+                    stateToSentencesDictionary[formattedState].Add(new SentenceStruct(formattedSentence, TextType.Reaction, state, continueTalking));
                 }
             }
         }
@@ -158,6 +180,11 @@ public class TextImporter : MonoBehaviour {
             sentenceIndex++;
             return true;
         }
+        else if (currentLineSentences[sentenceIndex].Continue)
+        {
+            sentenceIndex = 0;
+            return true;
+        }
         else
         {
             //TODO Decide if we want to keep repeating the line or advance to next (it may be done indirectly with states)
@@ -185,10 +212,11 @@ public class TextImporter : MonoBehaviour {
         return null;//If there aren't more sentences or the next one is not an answer
     }
 
-    public string GetCorrectReaction(int answerSelected, out string reactionState)
+    public string GetCorrectReaction(int answerSelected, out string reactionState, out bool continueTalking)
     {
         //We assume all remaining sentences are reactions
         reactionState = null;
+        continueTalking = false;
         for (int i = 0; i < 4; i++)
         {
             if (i == answerSelected)
@@ -198,6 +226,7 @@ public class TextImporter : MonoBehaviour {
                 if (currentLineSentences[aux + i].State != null)
                 {
                     reactionState = currentLineSentences[aux + i].State;
+                    continueTalking = currentLineSentences[aux + i].Continue;
                 }
                 return currentLineSentences[aux + i].Sentence;
             }
