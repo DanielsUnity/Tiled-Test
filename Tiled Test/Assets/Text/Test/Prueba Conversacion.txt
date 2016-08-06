@@ -1,4 +1,4 @@
->State: Neutral;Hello, my name's Test, who are you?;Are you friend or foe?;>Answer 1: A friend.;>Answer 2: A foe, prepare to die!;>Reaction 1/ Welcoming: Welcome!;>Reaction 2/ Panic: Heeeelp!
+>State: Neutral;Hello, my name's Test, who are you?;Are you friend or foe?;>Answer 1: A friend.;>Answer 2: A foe, prepare to die!;>Answer 3: A friend. Now, could you tell me if this smells like chloroform?;>Answer 4: What? I'm a bit deaf, could you repeat it?;>Reaction 1/ Welcoming: Welcome!;>Reaction 2/ Panic: Heeeelp!;>Reaction 3/ Panic: Heeeelp!;>Reaction 4 (Continue)/ Neutral: Sure! (Is he pulling my leg?);
 >State: Welcoming;Do you need some help with the controls?;>Answer 1: Yes;>Answer 2: Nope;>Reaction 1/ Kidding: Press B + A + forward + forward-up + up + X + Y to perform a backflip;>Reaction 2/ Welcoming: You think you're an expert, huh?  
->State: Panic;Heeeelp!
+>State: Panic;Don't touch me!;Are you going to murder everyone in here?;>Answer: Yes;>Reaction / Panic: You sure didn't hesitate, you're a terrible person.
 >State: Kidding;>Reaction (Continue)/ Welcoming: Just Kidding!

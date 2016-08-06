@@ -4,10 +4,13 @@ using System;
 
 public class NPCStateManager : StateManager
 {
+    public Sprite facingDown;
 
     private State currentState = (State)0;
     private string[] stateNames = System.Enum.GetNames(typeof(State));
     private int stateCount = System.Enum.GetValues(typeof(State)).Length;
+
+    private SpriteRenderer spriteRenderer;
 
     public enum State
     {
@@ -17,14 +20,25 @@ public class NPCStateManager : StateManager
         Kidding
     }
 
+    void Awake()
+    {
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();//Don't do that if the character may have more than one sprite renderer (maybe carrying an object)
+        if (!spriteRenderer) { Debug.LogError("Sprite renderer not found in child!", this); }
+    }
+
+    public void OnDefault()
+    {
+        OnNeutral();
+    }
+
     public override void  DefaultBehavior()
     {
         //Set this to an already defined behavior, useful for different conversation states with the same behavior
+        NeutralBehavior();
     }
 
     public override void SetCurrentState(string state)
     {
-        //Probably work for a super class
         foreach (string name in stateNames) 
         {
             if (name == state)
@@ -39,7 +53,6 @@ public class NPCStateManager : StateManager
 
     public override void SetCurrentState(int state)
     {
-        //Probably work for a super class
         if (state < stateCount && state >= 0)
         {
             currentState = (State)state;
@@ -53,7 +66,6 @@ public class NPCStateManager : StateManager
 
     public void SetCurrentState(State state)
     {
-        //Probably work for a super class
         currentState = state;
         OnChangeState();
     }
@@ -79,33 +91,18 @@ public class NPCStateManager : StateManager
         {
             OnNeutral();
         }
-        if (currentState == State.Panic)
+        else
         {
-            OnPanic();
+            OnDefault();
         }
-        if (currentState == State.Welcoming)
-        {
-            OnWelcoming();
-        }
-    }
-
-    private void OnWelcoming()
-    {
-        Debug.Log("State changed to \"Welcoming\"");
-        //TODO Change lines of text the guy speaks
-    }
-
-    private void OnPanic()
-    {
-        Debug.Log("State changed to \"Panic\"");
     }
 
     private void OnNeutral()
     {
-        Debug.Log("State changed to \"Neutral\"");
+        
     }
 
-    void Update()
+    void FixedUpdate()
     {
         ExecuteStateBehavior();
     } 
@@ -116,32 +113,14 @@ public class NPCStateManager : StateManager
         {
             NeutralBehavior();
         }
-        if (currentState == State.Panic)
-        {
-            PanicBehavior();
-        }
-        if (currentState == State.Welcoming)
-        {
-            WelcomingBehavior();
-        }
         else
         {
             DefaultBehavior();
         }
     }
 
-    private void WelcomingBehavior()
-    {
-        
-    }
-
-    private void PanicBehavior()
-    {
-        
-    }
-
     private void NeutralBehavior()
     {
-        
+        spriteRenderer.sprite = facingDown;
     }
 }
