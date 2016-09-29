@@ -16,12 +16,21 @@ public class DialogManager : MonoBehaviour {
     private int answerSelected = 0;
     private int numberOfAnswers = 4;
     private string reactionState = null;
+    private float cameraPlayerOffset = 0;
 
     void Awake()
     {
         gameCamera = FindObjectOfType<Camera>();
         textImporter = GetComponent<TextImporter>();
         stateManager = GetComponent<StateManager>();
+        GameObject mobileUI = GameObject.FindGameObjectWithTag("Mobile UI");
+        if (mobileUI)
+        {
+            float UIScreenVerticalPercentage = mobileUI.GetComponent<RectTransform>().anchorMax.y;
+            float UIHeight = gameCamera.orthographicSize * 2 * UIScreenVerticalPercentage;
+            float gameplayViewportCenter = (gameCamera.orthographicSize * 2 - UIHeight) / 2;
+            cameraPlayerOffset = gameCamera.orthographicSize - gameplayViewportCenter;
+        }
     }
 
     void Start()
@@ -277,7 +286,7 @@ public class DialogManager : MonoBehaviour {
 
     public void WriteInCorrectBox(string line)
     {
-        if (transform.position.y < gameCamera.transform.position.y)
+        if (transform.position.y < gameCamera.transform.position.y + cameraPlayerOffset)
         {
             UpperDialogBox.instance.Show(line);
         }
