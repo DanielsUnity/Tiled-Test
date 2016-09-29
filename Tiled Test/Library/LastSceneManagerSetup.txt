@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/_Scenes/_Scene.unity
+- path: Assets/_Scenes/Mobile Danger Zone.unity
   isLoaded: 1
   isActive: 1
