@@ -46,7 +46,8 @@ public class FollowerCamera : MonoBehaviour {
 	
 	void Update () {
         float newCameraCenter = objectToFollow.position.y - cameraPlayerOffset;
-        transform.position = new Vector3(objectToFollow.position.x, newCameraCenter, transform.position.z);
+        Vector3 newPosition = new Vector3(objectToFollow.position.x, newCameraCenter, transform.position.z);
+        transform.position = newPosition;
 
         float currentXPosition = transform.position.x;
         float currentYPosition = transform.position.y;
@@ -54,6 +55,7 @@ public class FollowerCamera : MonoBehaviour {
         currentXPosition = Mathf.Clamp(currentXPosition,-xBoundary,xBoundary);
         currentYPosition = Mathf.Clamp(currentYPosition,yLowerBoundary,yUpperBoundary);
 
-        transform.position = new Vector3(currentXPosition,currentYPosition,transform.position.z);
+        Vector3 clampedPosition = new Vector3(currentXPosition, currentYPosition, transform.position.z);
+        transform.position = clampedPosition;
     }
 }

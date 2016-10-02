@@ -7,7 +7,7 @@ public class CharacterBehaviorModel : MonoBehaviour {
     public float speed = 5f;
 
     private Rigidbody2D playerBody;
-    private Vector3 movementVector = Vector3.down;
+    private Vector3 movementVector = Vector3.zero;
     private Vector3 facingDirection = Vector3.down;
 
 
@@ -48,6 +48,15 @@ public class CharacterBehaviorModel : MonoBehaviour {
             {
                 facingDirection = direction;
             }
+        }
+    }
+
+    public void SetFacingDirection(Vector3 direction)
+    {
+        facingDirection = direction;
+        if (IsMoving())
+        {
+            movementVector = direction;
         }
     }
 
