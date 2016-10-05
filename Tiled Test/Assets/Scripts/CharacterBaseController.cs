@@ -15,6 +15,7 @@ public class CharacterBaseController : MonoBehaviour {
     protected void SetDirection(Vector3 direction)
     {
         if (characterModel == null) { return; }
+        Debug.Log("Moving towards " + direction);
         characterModel.SetDirection(direction);
     }
 

@@ -6,11 +6,11 @@ using System.Collections;
 public class CharacterView : MonoBehaviour {
 
     private Animator animator;
-    private CharacterBehaviorModel playerModel; 
+    private CharacterBehaviorModel characterModel; 
 	
 	void Start () {
         animator = GetComponent<Animator>();
-        playerModel = GetComponent<CharacterBehaviorModel>();
+        characterModel = GetComponent<CharacterBehaviorModel>();
 	}
 	
     
@@ -20,7 +20,7 @@ public class CharacterView : MonoBehaviour {
 
     void UpdateFacingDirection()
     {
-        Vector3 direction = playerModel.GetFacingDirection();
+        Vector3 direction = characterModel.GetFacingDirection();
 
         if (direction != Vector3.zero)
         {
@@ -28,6 +28,6 @@ public class CharacterView : MonoBehaviour {
             animator.SetFloat("DirectionY", direction.y);
         }
 
-        animator.SetBool("isMoving", playerModel.IsMoving());
+        animator.SetBool("isMoving", characterModel.IsMoving());
     }
 }
