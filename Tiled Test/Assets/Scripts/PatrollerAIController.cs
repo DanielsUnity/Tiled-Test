@@ -40,17 +40,19 @@ public class PatrollerAIController : CharacterBaseController {
 
         foreach (Vector2 angle in sightAngles)
         {
-            hits.Add(Physics2D.Raycast(traceStart.transform.position, angle, sightDistance, LayerMask.GetMask("Player")));
+            hits.Add(Physics2D.Raycast(traceStart.transform.position, angle, sightDistance, LayerMask.GetMask("Player","Block Raycast")));
             Debug.DrawLine(traceStart.transform.position, traceStart.transform.position + ((Vector3)angle * sightDistance), Color.red);
         }
-        //TODO Stop on walls
 
         foreach(RaycastHit2D hit in hits)
         {
             if (hit)
             {
-                Debug.Log("Player hit, " + Time.realtimeSinceStartup);
-                break;
+                if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
+                {
+                    Debug.Log("Player hit, " + Time.realtimeSinceStartup);
+                    break;
+                }
             }
         }
   
