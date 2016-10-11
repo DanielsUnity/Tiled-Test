@@ -31,13 +31,13 @@ public class PatrollerAIController : CharacterBaseController {
     {
         patroller = GetComponent<CharacterBehaviorModel>();
         stateManager = GetComponent<PatrollerStateManager>();
-        nextBeacon = beacons[0];
+        
         numberOfBeacons = beacons.Length;
+        if (numberOfBeacons > 0) { nextBeacon = beacons[0]; } else { isInspecting = true; }
     }
 
     void Update()
     {
-        //UpdateDirection();//Just for testing
         LookForIntruders();
     }
 
@@ -83,29 +83,15 @@ public class PatrollerAIController : CharacterBaseController {
 
     }
 
-    private void UpdateDirection()
-    {
-        /*
-        //For now we'll debug by using the controller, later it has to patrol automatically
-        float horizontal = Input.GetAxis("Keyboard Horizontal");
-        float vertical = Input.GetAxis("Keyboard Vertical");
-
-        float xDirection;
-        float yDirection;
-        float xAbs = Mathf.Abs(horizontal);
-        float yAbs = Mathf.Abs(vertical);
-
-        if (xAbs != 0) { xDirection = horizontal / xAbs; } else { xDirection = 0; }
-        if (yAbs != 0) { yDirection = vertical / yAbs; } else { yDirection = 0; }
-
-        NormalizeAndSetDirection(xDirection, yDirection);
-        */
-    }
 
     public void EnemyDetectedBehavior()
     {
         //TODO Provisional behavior
-        SetDirection(characterModel.GetFacingDirection());
+        if (numberOfBeacons > 0)
+        { 
+            SetDirection(characterModel.GetFacingDirection());
+        }
+        //Start counter and extend patrollers' sight
     }
 
     public void PatrolBehavior()

@@ -5,10 +5,10 @@ using System;
 public class CharacterBehaviorModel : MonoBehaviour {
 
     public float speed = 5f;
+    public Vector3 facingDirection = Vector3.down;
 
     private Rigidbody2D playerBody;
     private Vector3 movementVector = Vector3.zero;
-    private Vector3 facingDirection = Vector3.down;
 
 
     void Start()
@@ -19,6 +19,7 @@ public class CharacterBehaviorModel : MonoBehaviour {
 
     void FixedUpdate()
     {
+        facingDirection.Normalize();//For inspector tweaks on play
         UpdateMovement();
     }
 

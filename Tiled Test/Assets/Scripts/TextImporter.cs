@@ -187,7 +187,6 @@ public class TextImporter : MonoBehaviour {
         }
         else
         {
-            //TODO Decide if we want to keep repeating the line or advance to next (it may be done indirectly with states)
             sentenceIndex = 0;
             return false;
         }
