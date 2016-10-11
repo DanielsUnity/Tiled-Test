@@ -6,6 +6,7 @@ public class NPCStateManager : StateManager
 {
     public Sprite facingDown;
 
+    //Next 3 variables are used for every class extending StateManager
     private State currentState = (State)0;
     private string[] stateNames = System.Enum.GetNames(typeof(State));
     private int stateCount = System.Enum.GetValues(typeof(State)).Length;

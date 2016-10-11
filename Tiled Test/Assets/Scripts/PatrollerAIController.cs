@@ -4,23 +4,40 @@ using System;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(CharacterBehaviorModel))]
+[RequireComponent(typeof(PatrollerStateManager))]
 public class PatrollerAIController : CharacterBaseController {
 
     public GameObject traceStart;
     public float sightDistance = 4;//Sensible value, not too long so the enemy can't "ambush" you when turning
+
     [Range(10, 60)]
     public float maxSightAngle = 30;
 
+    public BeaconBase[] beacons;
+
+
     private CharacterBehaviorModel patroller;
+    private PatrollerStateManager stateManager;
+
+    private BeaconBase nextBeacon;
+    private int beaconIndex = 0;
+    private int numberOfBeacons;
+
+    private bool isInspecting = false;
+
+
 
     void Awake()
     {
         patroller = GetComponent<CharacterBehaviorModel>();
+        stateManager = GetComponent<PatrollerStateManager>();
+        nextBeacon = beacons[0];
+        numberOfBeacons = beacons.Length;
     }
 
     void Update()
     {
-        UpdateDirection();
+        //UpdateDirection();//Just for testing
         LookForIntruders();
     }
 
@@ -50,16 +67,25 @@ public class PatrollerAIController : CharacterBaseController {
             {
                 if (hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
                 {
-                    Debug.Log("Player hit, " + Time.realtimeSinceStartup);
-                    break;
+                    if (stateManager.GetCurrentState() != PatrollerStateManager.State.EnemyDetected)
+                    {
+                        stateManager.SetCurrentState(PatrollerStateManager.State.EnemyDetected);
+                    }
+                    return;
                 }
             }
         }
-  
+
+        if (stateManager.GetCurrentState() != PatrollerStateManager.State.Patrol)
+        {
+            stateManager.SetCurrentState(PatrollerStateManager.State.Patrol);
+        }
+
     }
 
     private void UpdateDirection()
     {
+        /*
         //For now we'll debug by using the controller, later it has to patrol automatically
         float horizontal = Input.GetAxis("Keyboard Horizontal");
         float vertical = Input.GetAxis("Keyboard Vertical");
@@ -72,9 +98,52 @@ public class PatrollerAIController : CharacterBaseController {
         if (xAbs != 0) { xDirection = horizontal / xAbs; } else { xDirection = 0; }
         if (yAbs != 0) { yDirection = vertical / yAbs; } else { yDirection = 0; }
 
+        NormalizeAndSetDirection(xDirection, yDirection);
+        */
+    }
+
+    public void EnemyDetectedBehavior()
+    {
+        
+    }
+
+    public void PatrolBehavior()
+    {
+        if (!isInspecting)
+        {
+            Vector2 directionVector = nextBeacon.transform.position - transform.position;
+            if (directionVector.sqrMagnitude > Mathf.Pow(1 / patroller.speed, 2))
+            {
+                NormalizeAndSetDirection(directionVector.x, directionVector.y);
+            }
+            else
+            {
+                SetDirection(directionVector / patroller.speed);
+                nextBeacon.ArrivedToBeacon(this);
+                SetNextBeacon();
+            }
+        }
+    }
+
+    void NormalizeAndSetDirection(float xDirection, float yDirection)
+    {
         Vector3 movementVector = new Vector3(xDirection, yDirection, 0);
         movementVector.Normalize();
-
         SetDirection(movementVector);
+    }
+
+    public void SetNextBeacon()
+    {
+        beaconIndex++;
+        beaconIndex %= numberOfBeacons;
+        nextBeacon = beacons[beaconIndex];
+    }
+
+    public void WaitInPlace(Vector3 facingDirection)
+    {
+        isInspecting = true;
+        SetDirection(Vector3.zero);
+        characterModel.SetFacingDirection(facingDirection);
+        //TODO Make false again in X seconds
     }
 }

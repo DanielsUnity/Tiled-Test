@@ -50,7 +50,6 @@ public class StopAndGoButton : MonoBehaviour {
 
     public void OnClick()
     {
-        Debug.Log("OnClick");
         if (currentState == State.Stop)
         {
             Go();
@@ -64,14 +63,12 @@ public class StopAndGoButton : MonoBehaviour {
     void Go()
     {
         character.SetDirection(character.GetFacingDirection());
-        Debug.Log("Go");
         currentState = State.Go;
     }
 
     void Stop()
     {
         character.SetDirection(Vector3.zero);
-        Debug.Log("Stop");
         currentState = State.Stop;
     }
 }
