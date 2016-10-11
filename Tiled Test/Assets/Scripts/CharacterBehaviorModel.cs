@@ -17,20 +17,9 @@ public class CharacterBehaviorModel : MonoBehaviour {
         SetDirection(movementVector);
     }
 
-    void Update () {
-        UpdateDirection();
-	}
-
     void FixedUpdate()
     {
         UpdateMovement();
-    }
-
-
-
-    void UpdateDirection()
-    {
-        
     }
 
     private void UpdateMovement()
@@ -44,10 +33,7 @@ public class CharacterBehaviorModel : MonoBehaviour {
 
         if (direction != Vector3.zero)  //if it doesn't move we don't want him to change facing direction at all
         {
-            if (direction.x == 0 || direction.y == 0)   //We want to keep the facing direction if he goes in a diagonal angle
-            {
                 facingDirection = direction;
-            }
         }
     }
 
@@ -60,7 +46,7 @@ public class CharacterBehaviorModel : MonoBehaviour {
         }
     }
 
-    public Vector3 GetFacingDirection()
+    public Vector3 GetFacingDirection()//Called by CharacterView every frame
     {
         return facingDirection;
     }

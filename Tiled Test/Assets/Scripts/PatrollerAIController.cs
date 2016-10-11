@@ -104,7 +104,8 @@ public class PatrollerAIController : CharacterBaseController {
 
     public void EnemyDetectedBehavior()
     {
-        
+        //TODO Provisional behavior
+        SetDirection(characterModel.GetFacingDirection());
     }
 
     public void PatrolBehavior()
@@ -119,8 +120,9 @@ public class PatrollerAIController : CharacterBaseController {
             else
             {
                 SetDirection(directionVector / patroller.speed);
-                nextBeacon.ArrivedToBeacon(this);
+                BeaconBase currentBeacon = nextBeacon;
                 SetNextBeacon();
+                currentBeacon.ArrivedToBeacon(this);
             }
         }
     }
@@ -139,11 +141,19 @@ public class PatrollerAIController : CharacterBaseController {
         nextBeacon = beacons[beaconIndex];
     }
 
-    public void WaitInPlace(Vector3 facingDirection)
+    public IEnumerator WaitInPlace(Vector3 facingDirection, float seconds)
     {
         isInspecting = true;
         SetDirection(Vector3.zero);
         characterModel.SetFacingDirection(facingDirection);
-        //TODO Make false again in X seconds
+        
+        yield return new WaitForSeconds(seconds);
+        isInspecting = false;
+
+    }
+
+    public void FaceDirection(Vector3 direction)
+    {
+        characterModel.SetFacingDirection(direction);
     }
 }
