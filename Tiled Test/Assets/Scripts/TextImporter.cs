@@ -11,8 +11,6 @@ public class TextImporter : MonoBehaviour {
     private int sentenceIndex = 0;
     private Dictionary<string, List<SentenceStruct>> stateToSentencesDictionary = new Dictionary<string, List<SentenceStruct>>();
 
-    //TODO Figure out how to write different messages in different sections of the game (Maybe writing the files with [Chapter X] and [State X])
-
     public enum TextType
     {
         Regular,

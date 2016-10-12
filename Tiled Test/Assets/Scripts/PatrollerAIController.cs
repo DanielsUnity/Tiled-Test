@@ -15,6 +15,10 @@ public class PatrollerAIController : CharacterBaseController {
 
     public BeaconBase[] beacons;
 
+    public delegate void PatrollerDelegate();
+    public static event PatrollerDelegate OnPlayerDetected;
+    public static event PatrollerDelegate OnPlayerLost;
+
 
     private CharacterBehaviorModel patroller;
     private PatrollerStateManager stateManager;
@@ -70,6 +74,11 @@ public class PatrollerAIController : CharacterBaseController {
                     if (stateManager.GetCurrentState() != PatrollerStateManager.State.EnemyDetected)
                     {
                         stateManager.SetCurrentState(PatrollerStateManager.State.EnemyDetected);
+                        //Throw enemy detected event
+                        if (OnPlayerDetected != null)
+                        {
+                            OnPlayerDetected();
+                        }
                     }
                     return;
                 }
@@ -79,6 +88,11 @@ public class PatrollerAIController : CharacterBaseController {
         if (stateManager.GetCurrentState() != PatrollerStateManager.State.Patrol)
         {
             stateManager.SetCurrentState(PatrollerStateManager.State.Patrol);
+            //Throw enemy lost event
+            if (OnPlayerLost != null)
+            {
+                OnPlayerLost();
+            }
         }
 
     }
