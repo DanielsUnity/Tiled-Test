@@ -9,6 +9,8 @@ public class PatrollerAIController : CharacterBaseController {
 
     public GameObject traceStart;
     public float sightDistance = 4;//Sensible value, not too long so the enemy can't "ambush" you when turning
+    [Range(1, 2)]
+    public float alertSightMultiplier = 1.5f;
 
     [Range(10, 60)]
     public float maxSightAngle = 30;
@@ -79,6 +81,7 @@ public class PatrollerAIController : CharacterBaseController {
                         {
                             OnPlayerDetected();
                         }
+                        sightDistance *= alertSightMultiplier;
                     }
                     return;
                 }
@@ -93,6 +96,7 @@ public class PatrollerAIController : CharacterBaseController {
             {
                 OnPlayerLost();
             }
+            sightDistance /= alertSightMultiplier;
         }
 
     }
@@ -101,11 +105,11 @@ public class PatrollerAIController : CharacterBaseController {
     public void EnemyDetectedBehavior()
     {
         //TODO Provisional behavior
+        SetDirection(Vector3.zero);
         if (numberOfBeacons > 0)
         { 
-            SetDirection(characterModel.GetFacingDirection());
+            //Don't do anything either
         }
-        //Start counter and extend patrollers' sight
     }
 
     public void PatrolBehavior()

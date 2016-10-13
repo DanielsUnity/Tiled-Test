@@ -4,9 +4,13 @@ using UnityEngine.UI;
 
 public class AlarmCounter : MonoBehaviour {
 
+    public int alertTime = 3;
+
     private int numberOfCurrentDetections = 0;
     private Image counterImage;
     private Text timeLeft;
+    private int timer;
+    private IEnumerator countdownCoroutine;
 
     void Awake()
     {
@@ -14,6 +18,12 @@ public class AlarmCounter : MonoBehaviour {
         if (!timeCounter) { Debug.LogError("No Time Counter on the UI", this); }
         counterImage = timeCounter.GetComponentInChildren<Image>();
         timeLeft = counterImage.GetComponentInChildren<Text>();
+    }
+
+    void Start()
+    {
+        timer = alertTime;
+        countdownCoroutine = Countdown();
     }
 
     void OnEnable()
@@ -35,7 +45,6 @@ public class AlarmCounter : MonoBehaviour {
             StartCounter();
         }
         numberOfCurrentDetections++;
-        Debug.Log("Patroller's detecting player: " + numberOfCurrentDetections);
     }
 
     void DecrementDetections()
@@ -45,19 +54,46 @@ public class AlarmCounter : MonoBehaviour {
         {
             StopCounter();
         }
-        Debug.Log("Player lost. Patroller's detecting player: " + numberOfCurrentDetections);
     }
 
     void StartCounter()
     {
         counterImage.enabled = true;
         timeLeft.enabled = true;
-        //TODO Actually start the counter, maybe use a corroutine
+        StartCoroutine(countdownCoroutine);
     }
 
     void StopCounter()
     {
         timeLeft.enabled = false;
         counterImage.enabled = false;
+        StopCoroutine(countdownCoroutine);
+        countdownCoroutine = Countdown();
+        timer = alertTime;
+    }
+
+    IEnumerator Countdown()
+    {
+        do
+        {
+            timeLeft.text = timer.ToString();
+            if (timer == 0)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (!player) { Debug.LogError("Player not found", this); }
+                player.GetComponent<CharacterBehaviorModel>().Freeze();
+
+                GameObject portal = GameObject.FindGameObjectWithTag("Portal");
+                if (!portal) { Debug.LogError("Portal not found", this); }
+                portal.GetComponent<SpriteRenderer>().enabled = true;
+                Animator animator = portal.GetComponent<Animator>();
+                animator.enabled = true;
+                animator.SetTrigger("Enable Trigger");
+
+                break;
+            }
+            yield return new WaitForSeconds(1);//if stop counter is executed while in here the loop won't stop
+            timer--;
+        } while (true);
     }
 }

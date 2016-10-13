@@ -126,4 +126,11 @@ public class GameManager : MonoBehaviour {
         }
         return true;
     }
+
+    public void ReloadCurrrentScene()
+    {
+        SaveCurrentSceneDictionary();
+        SceneManager.LoadScene(currentLevel);
+        spawnPointManager.ManageSpawnPoint(exitPointID); 
+    }
 }

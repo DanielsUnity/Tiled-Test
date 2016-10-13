@@ -9,6 +9,7 @@ public class CharacterBehaviorModel : MonoBehaviour {
 
     private Rigidbody2D playerBody;
     private Vector3 movementVector = Vector3.zero;
+    private bool isFrozen = false;
 
 
     void Start()
@@ -25,25 +26,34 @@ public class CharacterBehaviorModel : MonoBehaviour {
 
     private void UpdateMovement()
     {
-        playerBody.velocity = movementVector * speed;
+        if (!isFrozen)
+        {
+            playerBody.velocity = movementVector * speed;
+        }
     }
 
     public void SetDirection(Vector3 direction)
     {
-        movementVector = direction;
-
-        if (direction != Vector3.zero)  //if it doesn't move we don't want him to change facing direction at all
+        if (!isFrozen)
         {
+            movementVector = direction;
+
+            if (direction != Vector3.zero)  //if it doesn't move we don't want him to change facing direction at all
+            {
                 facingDirection = direction;
+            }
         }
     }
 
     public void SetFacingDirection(Vector3 direction)
     {
-        facingDirection = direction;
-        if (IsMoving())
+        if (!isFrozen)
         {
-            movementVector = direction;
+            facingDirection = direction;
+            if (IsMoving())
+            {
+                movementVector = direction;
+            }
         }
     }
 
@@ -62,4 +72,14 @@ public class CharacterBehaviorModel : MonoBehaviour {
         return movementVector != Vector3.zero;
     }
 
+    public void Freeze()
+    {
+        movementVector = Vector3.zero;
+        isFrozen = true;
+    }
+
+    public void Unfreeze()
+    {
+        isFrozen = false;
+    }
 }
