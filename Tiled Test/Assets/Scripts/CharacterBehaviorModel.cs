@@ -75,6 +75,7 @@ public class CharacterBehaviorModel : MonoBehaviour {
     public void Freeze()
     {
         movementVector = Vector3.zero;
+        playerBody.velocity = movementVector * speed;
         isFrozen = true;
     }
 
