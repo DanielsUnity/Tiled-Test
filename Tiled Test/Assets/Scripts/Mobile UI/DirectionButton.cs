@@ -47,4 +47,9 @@ public class DirectionButton : MonoBehaviour {
     {
         character.SetFacingDirection(direction);
     }
+
+    public void InverseDirection()
+    {
+        character.SetFacingDirection(character.GetFacingDirection() * (-1));
+    }
 }
