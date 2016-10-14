@@ -56,7 +56,7 @@ public class StopAndGoButton : MonoBehaviour {
         }
         else if (currentState == State.Go)
         {
-            Stop();
+            Stop(); 
         }
     }
 

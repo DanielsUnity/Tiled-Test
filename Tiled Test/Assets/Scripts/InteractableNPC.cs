@@ -33,13 +33,29 @@ public class InteractableNPC : InteractableBase
 
     public override void OnInteractFromLeftSide(Character character)
     {
-        spriteRenderer.sprite = facingLeft;
+        if (!facingLeft)
+        {
+            spriteRenderer.sprite = facingRight;
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            spriteRenderer.sprite = facingLeft;
+        }
         dialogManager.Manage();
     }
 
     public override void OnInteractFromRightSide(Character character)
     {
-        spriteRenderer.sprite = facingRight;
+        if (!facingRight)
+        {
+            spriteRenderer.sprite = facingLeft;
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            spriteRenderer.sprite = facingRight;
+        }
         dialogManager.Manage();
     }
 }

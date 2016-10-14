@@ -60,19 +60,19 @@ public class SpawnPointManager : MonoBehaviour {
         ExitPointID id = exitPoint.exitPointID;
         if (id >= ExitPointID.SpecialEnterEast1 && id <= ExitPointID.SpecialEnterEast4)
         {
-            player.GetComponent<CharacterBehaviorModel>().SetDirection(Vector3.left);
+            player.GetComponent<CharacterBehaviorModel>().SetFacingDirection(Vector3.left);
         }
         if (id >= ExitPointID.SpecialEnterWest1 && id <= ExitPointID.SpecialEnterWest4)
         {
-            player.GetComponent<CharacterBehaviorModel>().SetDirection(Vector3.right);
+            player.GetComponent<CharacterBehaviorModel>().SetFacingDirection(Vector3.right);
         }
         if (id >= ExitPointID.SpecialEnterNorth1 && id <= ExitPointID.SpecialEnterNorth4)
         {
-            player.GetComponent<CharacterBehaviorModel>().SetDirection(Vector3.down);
+            player.GetComponent<CharacterBehaviorModel>().SetFacingDirection(Vector3.down);
         }
         if (id >= ExitPointID.SpecialEnterSouth1 && id <= ExitPointID.SpecialEnterSouth4)
         {
-            player.GetComponent<CharacterBehaviorModel>().SetDirection(Vector3.up);
+            player.GetComponent<CharacterBehaviorModel>().SetFacingDirection(Vector3.up);
         }
     }
 }
