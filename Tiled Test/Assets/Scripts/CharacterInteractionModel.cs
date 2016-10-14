@@ -60,8 +60,7 @@ public class CharacterInteractionModel : MonoBehaviour {
     {
         //Collider2D[] closeColliders = Physics2D.OverlapCircleAll(transform.position, interactableRadius);
 
-        Collider2D[] closeColliders = 
-            Physics2D.OverlapAreaAll(characterCollider.bounds.min, characterCollider.bounds.max); //It has to touch our collider
+        Collider2D[] closeColliders = Physics2D.OverlapAreaAll(characterCollider.bounds.min, characterCollider.bounds.max); //It has to touch our collider
 
         InteractableBase closestInteractable = null;
         float angleToClosestInteractable = Mathf.Infinity;
