@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/_Scenes/Secret Room.unity
+- path: Assets/_Scenes/Main Room.unity
   isLoaded: 1
   isActive: 1
