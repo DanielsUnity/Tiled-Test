@@ -38,6 +38,27 @@ public class DialogManager : MonoBehaviour {
         if (textImporter) { isUsingTextImporter = true; }
     }
 
+    void OnEnable()
+    {
+        AnswerBoxButton.OnAnswerPressed += SelectBoxAndSubmit;
+    }
+
+    void OnDisable()
+    {
+        AnswerBoxButton.OnAnswerPressed -= SelectBoxAndSubmit;
+    }
+
+    void SelectBoxAndSubmit(int boxNumber)
+    {
+        if (inAnswerMode)
+        {
+            DeselectAnswer(answerSelected + 1);//answerBoxSelected = answerSelected + 1
+            answerSelected = boxNumber - 1;//answer selected goes from 0 to 3 and boxNumber from 1 to 4
+            SelectAnswer(boxNumber);
+            SubmitAnswer();
+        }
+    }
+
     void Update()
     {
         if (inAnswerMode)
@@ -88,6 +109,7 @@ public class DialogManager : MonoBehaviour {
         answerSelected = 0;
         DisableBoxes();
         Time.timeScale = 1f;
+        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterBehaviorModel>().Unfreeze();
 
         if (reactionState != null && stateManager)
         {
@@ -113,7 +135,7 @@ public class DialogManager : MonoBehaviour {
 
     void DisableBoxes()
     {
-        LowerDialogBox.instance.Hide();
+        //LowerDialogBox.instance.Hide();
         UpperDialogBox.instance.Hide();
         DisableAnswerBoxes();
     }
@@ -128,6 +150,7 @@ public class DialogManager : MonoBehaviour {
 
     void ShowMessage()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterBehaviorModel>().Freeze();
         Time.timeScale = 0f;
         if (!isUsingTextImporter)
         {
@@ -286,20 +309,21 @@ public class DialogManager : MonoBehaviour {
 
     public void WriteInCorrectBox(string line)
     {
-        if (transform.position.y < gameCamera.transform.position.y + cameraPlayerOffset)
-        {
+        //if (transform.position.y < gameCamera.transform.position.y + cameraPlayerOffset)
+        //{
             UpperDialogBox.instance.Show(line);
-        }
+        /*}
         else
         {
             LowerDialogBox.instance.Show(line);
-        }
+        }*/
     }
 
     public void WriteAlternateMessage(string line)
     {
         if (!isLastInteraction)
         {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterBehaviorModel>().Freeze();
             Time.timeScale = 0f;
             WriteInCorrectBox(line);
             isLastInteraction = true;

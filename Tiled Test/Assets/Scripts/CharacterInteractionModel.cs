@@ -14,22 +14,18 @@ public class CharacterInteractionModel : MonoBehaviour {
     private Character character;
 
 
-	void Start () {
+	void Awake () {
         character = GetComponent<Character>();
         playerModel = GetComponent<CharacterBehaviorModel>();
         characterCollider = GetComponent<Collider2D>();
 	}
-	
-
-	void Update () {
-	
-	}
-
 
     public void OnInteract()
     {
         InteractableBase usableInteractable = FindUsableInteractable();
         if (!usableInteractable) { return; }
+
+        FindObjectOfType<StopAndGoButton>().Stop();
 
         if(playerModel.GetFacingDirection() == Vector3.right)
         {
@@ -58,8 +54,6 @@ public class CharacterInteractionModel : MonoBehaviour {
     //Then select the one with the closest angle to us (we also must be facing it)
     InteractableBase FindUsableInteractable()
     {
-        //Collider2D[] closeColliders = Physics2D.OverlapCircleAll(transform.position, interactableRadius);
-
         Collider2D[] closeColliders = Physics2D.OverlapAreaAll(characterCollider.bounds.min, characterCollider.bounds.max); //It has to touch our collider
 
         InteractableBase closestInteractable = null;

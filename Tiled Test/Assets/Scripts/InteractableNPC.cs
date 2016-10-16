@@ -22,12 +22,14 @@ public class InteractableNPC : InteractableBase
     public override void OnInteractFromBelow(Character character)
     {
         spriteRenderer.sprite = facingDown;
+        spriteRenderer.flipX = false;
         dialogManager.Manage();
     }
 
     public override void OnInteractFromAbove(Character character)
     {
         spriteRenderer.sprite = facingUp;
+        spriteRenderer.flipX = false;
         dialogManager.Manage();
     }
 
@@ -41,6 +43,7 @@ public class InteractableNPC : InteractableBase
         else
         {
             spriteRenderer.sprite = facingLeft;
+            spriteRenderer.flipX = false;
         }
         dialogManager.Manage();
     }
@@ -55,6 +58,7 @@ public class InteractableNPC : InteractableBase
         else
         {
             spriteRenderer.sprite = facingRight;
+            spriteRenderer.flipX = false;
         }
         dialogManager.Manage();
     }

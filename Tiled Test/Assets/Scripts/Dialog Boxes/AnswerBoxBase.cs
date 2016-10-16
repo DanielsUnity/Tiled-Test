@@ -6,7 +6,7 @@ public class AnswerBoxBase : DialogBox {
 
     public virtual void Select()
     {
-        GetComponent<Image>().color = Color.green;
+        GetComponent<Image>().color = Color.gray;
     }
 
     public virtual void Deselect()

@@ -2,10 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class StopAndGoButton : MonoBehaviour {
+public class StopAndGoButton : ControlButtonBase {
 
-    private Button button;
-    private CharacterBehaviorModel character;
     private State currentState = (State)0;
 
     private enum State
@@ -14,41 +12,7 @@ public class StopAndGoButton : MonoBehaviour {
         Go
     }
 
-    void Awake()
-    {
-        button = GetComponent<Button>();
-        if (!button) { Debug.LogError("Button not found!", this); }
-
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (!player)
-        {
-            Debug.LogError("Player not found!", this);
-        }
-        else
-        {
-            character = player.GetComponent<CharacterBehaviorModel>();
-        }
-    }
-	
-	
-	void Update ()
-    {
-        //In case player dies, get the component again
-        if (!character)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (!player)
-            {
-                Debug.LogError("Player not found!", this);
-            }
-            else
-            {
-                character = player.GetComponent<CharacterBehaviorModel>();
-            }
-        }
-    }
-
-    public void OnClick()
+    public override void OnClick()
     {
         if (currentState == State.Stop)
         {
@@ -66,7 +30,7 @@ public class StopAndGoButton : MonoBehaviour {
         currentState = State.Go;
     }
 
-    void Stop()
+    public void Stop()
     {
         character.SetDirection(Vector3.zero);
         currentState = State.Stop;
