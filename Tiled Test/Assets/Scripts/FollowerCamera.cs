@@ -13,6 +13,7 @@ public class FollowerCamera : MonoBehaviour {
     private float yLowerBoundary;
     private float UIHeight = 0;
     private float cameraPlayerOffset = 0;
+    private float exportScale = 0.03125f;//32 pixels per unit by default
 
     void Awake()
     {
@@ -35,13 +36,15 @@ public class FollowerCamera : MonoBehaviour {
     }
 
 	void Start () {
+        exportScale = stage.ExportScale;
+
         float gameplayViewportCenter = (thisCamera.orthographicSize * 2 - UIHeight) / 2;
         cameraPlayerOffset = thisCamera.orthographicSize - gameplayViewportCenter;
 
-        yUpperBoundary = stage.NumTilesHigh/2 - thisCamera.orthographicSize; //this presupposes that every tile is one unit in size
-        yLowerBoundary = -stage.NumTilesHigh/2 + thisCamera.orthographicSize - UIHeight;
+        yUpperBoundary = (stage.MapHeightInPixels/2)*exportScale - thisCamera.orthographicSize;
+        yLowerBoundary = -(stage.MapHeightInPixels/2)*exportScale + thisCamera.orthographicSize - UIHeight;
 
-        xBoundary = stage.NumTilesWide/2 - thisCamera.orthographicSize * thisCamera.aspect;
+        xBoundary = (stage.MapWidthInPixels/2)*exportScale - thisCamera.orthographicSize * thisCamera.aspect;
     }
 	
 	void Update () {
