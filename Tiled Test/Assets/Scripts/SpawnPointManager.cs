@@ -10,6 +10,22 @@ public class SpawnPointManager : MonoBehaviour {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
+
+            if (lastExitPointID == ExitPointID.NotSpecified)
+            {
+                GameObject defaultSpawnPoint = GameObject.FindGameObjectWithTag("Default Spawn Point");
+                if (defaultSpawnPoint != null)
+                {
+                    player.transform.position = defaultSpawnPoint.transform.position;
+                    return;
+                }
+                else
+                {
+                    Debug.LogWarning("Default spawn point missing in current scene!");
+                }
+                return;
+            }
+
             ExitPoint[] exitPoints = FindObjectsOfType<ExitPoint>();
 
             foreach (ExitPoint exitPoint in exitPoints)
@@ -39,6 +55,7 @@ public class SpawnPointManager : MonoBehaviour {
                     }
                 }
             }
+
             if (exitPoints.Length > 1)
             {
                 SpawnInPlace(player, exitPoints[0]);

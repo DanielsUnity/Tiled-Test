@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
     private SpawnPointManager spawnPointManager;
-    private ExitPointID exitPointID = ExitPointID.EnterSouth1;
+    private ExitPointID exitPointID = ExitPointID.NotSpecified;
+    private ExitPointID lastExitPointID = ExitPointID.NotSpecified;
     private Dictionary<int,Dictionary<string,int>> scenesElementsAndStates= new Dictionary<int, Dictionary<string, int>>();
     private int currentLevel = 0;
+    private bool isReloading = false;
 
     void Awake()
     {
@@ -31,12 +33,23 @@ public class GameManager : MonoBehaviour {
     void OnLevelWasLoaded(int level)
     {
         if (this != instance) return; //To avoid duplicate GameManager to run this before being destroyed
+        if (!isReloading)
+        {
+            currentLevel = level;
 
-        currentLevel = level;
+            spawnPointManager.ManageSpawnPoint(exitPointID);
+            if (exitPointID != ExitPointID.NotSpecified)//This prevents having both exitPointID and lastExitPointId set to Not Specified
+            {
+                lastExitPointID = exitPointID;
+                exitPointID = ExitPointID.NotSpecified;
+            }
 
-        spawnPointManager.ManageSpawnPoint(exitPointID);
-
-        CheckScenesDictionary();
+            CheckScenesDictionary();
+        }
+        else
+        {
+            isReloading = false;
+        }
     }
 
     public void SetExitPoint(ExitPointID ID)
@@ -127,10 +140,12 @@ public class GameManager : MonoBehaviour {
         return true;
     }
 
-    public void ReloadCurrrentScene()
+    public void ReloadCurrentScene()
     {
-        SaveCurrentSceneDictionary();
+        //SaveCurrentSceneDictionary();//Without this, if you open a chest and get caught it'll be closed again
+        //TODO Check if you can get what's inside a chest multiple times by getting caught
+        isReloading = true;
         SceneManager.LoadScene(currentLevel);
-        spawnPointManager.ManageSpawnPoint(exitPointID); 
+        spawnPointManager.ManageSpawnPoint(lastExitPointID);
     }
 }

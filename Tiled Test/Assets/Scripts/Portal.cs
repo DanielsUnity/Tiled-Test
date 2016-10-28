@@ -15,7 +15,7 @@ public class Portal : MonoBehaviour {
         DisableAnimator();
 
         GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.ReloadCurrrentScene();
+        gameManager.ReloadCurrentScene();
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (!player) { Debug.LogError("Player not found by portal", this); }

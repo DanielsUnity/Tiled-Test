@@ -38,5 +38,7 @@
     SpecialEnterWest1 = 28,
     SpecialEnterWest2 = 29,
     SpecialEnterWest3 = 30,
-    SpecialEnterWest4 = 31
+    SpecialEnterWest4 = 31,
+
+    NotSpecified = 100
 }
