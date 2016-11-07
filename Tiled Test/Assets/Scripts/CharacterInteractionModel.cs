@@ -13,8 +13,12 @@ public class CharacterInteractionModel : MonoBehaviour {
     private Collider2D characterCollider;
     private Character character;
 
+    public delegate void CharacterDelegate(Collision2D collision);
+    public static event CharacterDelegate OnPlayerColliding;
+    public static event CharacterDelegate OnPlayerLeavingCollider;
 
-	void Awake () {
+
+    void Awake () {
         character = GetComponent<Character>();
         playerModel = GetComponent<CharacterBehaviorModel>();
         characterCollider = GetComponent<Collider2D>();
@@ -78,5 +82,27 @@ public class CharacterInteractionModel : MonoBehaviour {
        
         return closestInteractable;
 
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("MainCamera"))
+        {
+            if (OnPlayerColliding != null)
+            {
+                OnPlayerColliding(collision);
+            }
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("MainCamera"))
+        {
+            if (OnPlayerLeavingCollider != null)
+            {
+                OnPlayerLeavingCollider(collision);
+            }
+        }
     }
 }
